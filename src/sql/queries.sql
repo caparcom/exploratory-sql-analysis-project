@@ -1,52 +1,39 @@
--- PLEASE READ THIS BEFORE RUNNING THE EXERCISE
-
--- ⚠️ IMPORTANT: This SQL file may crash due to two common issues: comments and missing semicolons.
-
--- ✅ Suggestions:
--- 1) Always end each SQL query with a semicolon `;`
--- 2) Ensure comments are well-formed:
---    - Use `--` for single-line comments only
---    - Avoid inline comments after queries
---    - Do not use `/* */` multi-line comments, as they may break execution
-
--- -----------------------------------------------
--- queries.sql
--- Complete each mission by writing your SQL query
--- directly below the corresponding instruction
--- -----------------------------------------------
-
-SELECT * FROM regions;
-SELECT * FROM species;
-SELECT * FROM climate;
-SELECT * FROM observations;
-
-
 -- MISSION 1
--- Your query here;
+-- 1.1
+
+--SELECT * FROM observations limit 10;
+
+-- 1.2
+
+--SELECT distinct region_id FROM observations;
+
+-- 1.3
+
+--SELECT count(distinct species_id) FROM observations;
+
+-- 1.4 
+
+--SELECT count(*) FROM observations where region_id = 2;
+
+-- 1.5
+
+--SELECT * FROM observations where observation_date = '1998-08-08';
+
+
 
 -- MISSION 2
--- Your query here;
 
+-- 2.1
 
--- MISSION 3
--- Your query here;
+SELECT region_id, count(*) as ct FROM observations
+group by region_id
+having count(*) =
+    (
+        select count(*)
+        from Observations
+        group by region_id
+        order by count(*) desc
+        limit 1
+    );
+    
 
-
--- MISSION 4
--- Your query here;
-
-
--- MISSION 5
--- Your query here;
-
-
--- MISSION 6
--- Your query here;
-
-
--- MISSION 7
--- Your query here;
-
-
--- MISSION 8
--- Your query here;

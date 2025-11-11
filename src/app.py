@@ -28,13 +28,19 @@ def run_queries_from_file(engine, filepath):
         with open(filepath, 'r') as file:
             content = file.read()
         queries = [q.strip() for q in content.split(';') if q.strip()]
-        for i, query in enumerate(queries, start=0):
-            # Skip if it's just a comment
-            if query.startswith('--') or not any(c.isalnum() for c in query):
-                continue
+        for i, query in enumerate(queries, start=1):
+            # Remove comment lines from the query. We were leaving them in which was causing the parsing issues.
+            query_lines = [
+                line for line in query.split('\n') 
+                if line.strip() and not line.strip().startswith('--')
+            ]
+            clean_query = '\n'.join(query_lines).strip()
+            # Skip if empty after removing comments
+            if not clean_query or not any(c.isalnum() for c in clean_query):
+                continue 
             try:
-                print(f"\n🔎 Query {i}:\n{query}")
-                df = pd.read_sql(query, con=engine)
+                print(f"\n🔎 Query {i}:\n{clean_query}")
+                df = pd.read_sql(clean_query, con=engine)
                 print(df)
             except Exception as e:
                 print(f"❌ Error in Query {i}: {e}")
